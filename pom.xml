@@ -11,7 +11,7 @@
         <groupId>com.dominikcebula.samples.aws.lambda.products.catalog</groupId>
         <artifactId>products-catalog-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
-        <relativePath>products-catalog-parent</relativePath>
+        <relativePath>products-catalog-parent/pom.xml</relativePath>
     </parent>
 
     <modules>
