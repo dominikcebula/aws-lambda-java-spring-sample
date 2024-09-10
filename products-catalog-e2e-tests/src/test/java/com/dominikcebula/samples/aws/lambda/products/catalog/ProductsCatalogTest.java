@@ -1,5 +1,6 @@
 package com.dominikcebula.samples.aws.lambda.products.catalog;
 
+import com.dominikcebula.samples.aws.lambda.products.catalog.db.entity.Product;
 import com.dominikcebula.samples.aws.lambda.products.catalog.shared.http.product.ProductDTO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -15,8 +16,10 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.text.IsBlankString.blankString;
+import static org.springframework.http.HttpHeaders.LOCATION;
 
 public class ProductsCatalogTest {
     private static final String ENV_STAGE_NAME = "dev";
@@ -41,17 +44,22 @@ public class ProductsCatalogTest {
     }
 
     @Test
-    void shouldCreateAndRetrieveProduct() {
+    void shouldCreateProduct() {
         ProductDTO productDTO = createProductDTO();
 
-        given()
+        Product createdProduct = given()
                 .baseUri(apiEndpoint)
                 .when()
                 .body(productDTO)
                 .post("/products")
                 .then()
                 .assertThat()
-                .statusCode(HttpStatus.CREATED.value());
+                .statusCode(HttpStatus.CREATED.value())
+                .header(LOCATION, not(blankString()))
+                .extract()
+                .as(Product.class);
+
+        assertCreatedProduct(createdProduct);
     }
 
     private static String getApiEndpoint() {
@@ -80,6 +88,15 @@ public class ProductsCatalogTest {
         productDTO.setSku(PRODUCT_SKU);
         productDTO.setPrice(PRODUCT_PRICE);
         return productDTO;
+    }
+
+    private void assertCreatedProduct(Product createdProduct) {
+        assertThat(createdProduct.getId()).isNotBlank();
+        assertThat(createdProduct.getName()).isEqualTo(PRODUCT_NAME);
+        assertThat(createdProduct.getDescription()).isEqualTo(PRODUCT_DESCRIPTION);
+        assertThat(createdProduct.getCategory()).isEqualTo(PRODUCT_CATEGORY);
+        assertThat(createdProduct.getSku()).isEqualTo(PRODUCT_SKU);
+        assertThat(createdProduct.getPrice()).isEqualTo(PRODUCT_PRICE);
     }
 
     private static final String PRODUCT_NAME = "Stainless Steel Water Bottle";
