@@ -1,0 +1,98 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  aws-lambda-java-spring-products-catalog
+
+Globals:
+  Function:
+    Tracing: Active
+    CodeUri: products-catalog/target/serverless-lambda-java-spring-1.0.0-SNAPSHOT-aws.jar
+    Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
+    Runtime: java21
+    Timeout: 30
+    MemorySize: 256
+
+Resources:
+  ProductsApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: dev
+      Name: Products Catalog API
+
+  CreateProductFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Environment:
+        Variables:
+          SPRING_CLOUD_FUNCTION_DEFINITION: createProductFunction
+      Events:
+        ListProducts:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ProductsApi
+            Path: /products
+            Method: post
+
+  GetProductFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Environment:
+        Variables:
+          SPRING_CLOUD_FUNCTION_DEFINITION: getProductFunction
+      Events:
+        ListProducts:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ProductsApi
+            Path: /products/{productId}
+            Method: get
+
+  ListProductsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Environment:
+        Variables:
+          SPRING_CLOUD_FUNCTION_DEFINITION: listProductsFunction
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: products
+      Events:
+        ListProducts:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ProductsApi
+            Path: /products
+            Method: get
+
+  UpdateProductFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Environment:
+        Variables:
+          SPRING_CLOUD_FUNCTION_DEFINITION: updateProductFunction
+      Events:
+        ListProducts:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ProductsApi
+            Path: /products/{productId}
+            Method: put
+
+  DeleteProductFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Environment:
+        Variables:
+          SPRING_CLOUD_FUNCTION_DEFINITION: deleteProductFunction
+      Events:
+        ListProducts:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ProductsApi
+            Path: /products/{productId}
+            Method: delete
+
+Outputs:
+  ApiEndpoint:
+    Description: "API Gateway endpoint URL for Products API"
+    Value: !Sub "https://${ProductsApi}.execute-api.${AWS::Region}.amazonaws.com/"
