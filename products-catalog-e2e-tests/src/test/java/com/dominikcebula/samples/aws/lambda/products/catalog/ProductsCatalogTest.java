@@ -123,6 +123,26 @@ public class ProductsCatalogTest {
     }
 
     @Test
+    void shouldUpdateProductWithGivenId() {
+        UUID productId = UUID.randomUUID();
+        ProductDTO productDTO = buildProductDTO();
+
+        createProduct(productId, productDTO);
+
+        productDTO.setDescription("Updated description");
+        updateProduct(productId, productDTO);
+
+        Product product = retrieveProductById(productId.toString());
+
+        assertThat(product.getId()).isEqualTo(productId.toString());
+        assertThat(product.getName()).isEqualTo(PRODUCT_NAME);
+        assertThat(product.getDescription()).isEqualTo("Updated description");
+        assertThat(product.getCategory()).isEqualTo(PRODUCT_CATEGORY);
+        assertThat(product.getSku()).isEqualTo(PRODUCT_SKU);
+        assertThat(product.getPrice()).isEqualTo(PRODUCT_PRICE);
+    }
+
+    @Test
     void shouldCreateRetrieveAndRemoveProductById() {
         ProductDTO productDTO = buildProductDTO();
 
@@ -214,6 +234,19 @@ public class ProductsCatalogTest {
                 .put("/products/" + id);
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+        assertThat(response.body().asString()).isNotBlank();
+
+        return response;
+    }
+
+    private Response updateProduct(UUID id, ProductDTO productDTO) {
+        Response response = given()
+                .baseUri(apiEndpoint)
+                .when()
+                .body(productDTO)
+                .put("/products/" + id);
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.body().asString()).isNotBlank();
 
         return response;
