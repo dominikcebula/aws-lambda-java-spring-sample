@@ -2,6 +2,7 @@ package com.dominikcebula.samples.aws.lambda.products.catalog;
 
 import com.dominikcebula.samples.aws.lambda.products.catalog.db.entity.Product;
 import com.dominikcebula.samples.aws.lambda.products.catalog.shared.http.product.ProductDTO;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -45,7 +46,7 @@ public class ProductsCatalogTest {
 
     @Test
     void shouldCreateProduct() {
-        ProductDTO productDTO = createProductDTO();
+        ProductDTO productDTO = buildProductDTO();
 
         Product createdProduct = given()
                 .baseUri(apiEndpoint)
@@ -59,7 +60,27 @@ public class ProductsCatalogTest {
                 .extract()
                 .as(Product.class);
 
-        assertCreatedProduct(createdProduct);
+        assertProductData(createdProduct);
+    }
+
+    @Test
+    void shouldCreateAndRetrieveProductByHeader() {
+        ProductDTO productDTO = buildProductDTO();
+
+        Response response = createProduct(productDTO);
+
+        Product retrievedProduct = retrieveProductByLocationHeader(response);
+        assertProductData(retrievedProduct);
+    }
+
+    @Test
+    void shouldCreateAndRetrieveProductById() {
+        ProductDTO productDTO = buildProductDTO();
+
+        Response response = createProduct(productDTO);
+
+        Product retrievedProduct = retrieveProductById(response);
+        assertProductData(retrievedProduct);
     }
 
     private static String getApiEndpoint() {
@@ -80,7 +101,7 @@ public class ProductsCatalogTest {
         }
     }
 
-    private ProductDTO createProductDTO() {
+    private ProductDTO buildProductDTO() {
         ProductDTO productDTO = new ProductDTO();
         productDTO.setName(PRODUCT_NAME);
         productDTO.setDescription(PRODUCT_DESCRIPTION);
@@ -90,13 +111,50 @@ public class ProductsCatalogTest {
         return productDTO;
     }
 
-    private void assertCreatedProduct(Product createdProduct) {
+    private Response createProduct(ProductDTO productDTO) {
+        Response response = given()
+                .baseUri(apiEndpoint)
+                .when()
+                .body(productDTO)
+                .post("/products");
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+        assertThat(response.body().asString()).isNotBlank();
+
+        return response;
+    }
+
+    private void assertProductData(Product createdProduct) {
         assertThat(createdProduct.getId()).isNotBlank();
         assertThat(createdProduct.getName()).isEqualTo(PRODUCT_NAME);
         assertThat(createdProduct.getDescription()).isEqualTo(PRODUCT_DESCRIPTION);
         assertThat(createdProduct.getCategory()).isEqualTo(PRODUCT_CATEGORY);
         assertThat(createdProduct.getSku()).isEqualTo(PRODUCT_SKU);
         assertThat(createdProduct.getPrice()).isEqualTo(PRODUCT_PRICE);
+    }
+
+    private Product retrieveProductByLocationHeader(Response response) {
+        return given()
+                .baseUri(apiEndpoint)
+                .when()
+                .get(response.getHeader(LOCATION))
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .as(Product.class);
+    }
+
+    private Product retrieveProductById(Response response) {
+        String createdProductId = response.body().as(Product.class).getId();
+
+        return given()
+                .baseUri(apiEndpoint)
+                .when()
+                .get("/products/" + createdProductId)
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .as(Product.class);
     }
 
     private static final String PRODUCT_NAME = "Stainless Steel Water Bottle";
