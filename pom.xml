@@ -20,4 +20,13 @@
     <modules>
         <module>products-catalog-lambda-codebase</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>with-e2e-tests</id>
+            <modules>
+                <module>products-catalog-e2e-tests</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>
