@@ -1,0 +1,5 @@
+target
+.idea
+dynamodb-local-metadata.json
+build.toml
+.aws-sam
