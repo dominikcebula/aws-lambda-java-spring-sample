@@ -17,6 +17,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.text.IsBlankString.blankString;
 
 public class ProductsCatalogTest {
+    private static final String ENV_STAGE_NAME = "dev";
+
     private static String apiEndpoint;
 
     @BeforeAll
@@ -49,7 +51,7 @@ public class ProductsCatalogTest {
                     .filter(output -> output.outputKey().equals("ApiEndpoint"))
                     .map(Output::outputValue)
                     .findFirst()
-                    .map(endpoint -> endpoint + "dev")
+                    .map(endpoint -> endpoint + ENV_STAGE_NAME)
                     .orElseThrow(() -> new IllegalStateException("Unable to find API Endpoint for testing based on Cloud Formation Stack"));
         }
     }
