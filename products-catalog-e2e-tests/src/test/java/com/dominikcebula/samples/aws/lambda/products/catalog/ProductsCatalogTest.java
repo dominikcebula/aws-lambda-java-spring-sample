@@ -2,6 +2,7 @@ package com.dominikcebula.samples.aws.lambda.products.catalog;
 
 import com.dominikcebula.samples.aws.lambda.products.catalog.db.entity.Product;
 import com.dominikcebula.samples.aws.lambda.products.catalog.shared.http.product.ProductDTO;
+import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import software.amazon.awssdk.services.cloudformation.model.Stack;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,7 +43,7 @@ public class ProductsCatalogTest {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
-                .body(not(blankString())).extract();
+                .body(not(blankString()));
     }
 
     @Test
@@ -83,6 +85,27 @@ public class ProductsCatalogTest {
         assertProductData(retrievedProduct);
     }
 
+    @Test
+    void shouldCreateAndListMultipleProducts() {
+        ProductDTO productDTO1 = buildProductDTO();
+        ProductDTO productDTO2 = buildProductDTO();
+        ProductDTO productDTO3 = buildProductDTO();
+
+        Set<String> createdProductIds = Set.of(
+                createProductAndExtractId(productDTO1),
+                createProductAndExtractId(productDTO2),
+                createProductAndExtractId(productDTO3)
+        );
+
+        List<Product> retrievedProduct = retrievedProducts();
+
+        List<Product> filteredProducts = retrievedProduct.stream()
+                .filter(product -> createdProductIds.contains(product.getId()))
+                .toList();
+
+        assertProductsData(filteredProducts);
+    }
+
     private static String getApiEndpoint() {
         try (CloudFormationClient cloudFormationClient = CloudFormationClient.builder().httpClient(ApacheHttpClient.create()).build()) {
             DescribeStacksResponse response = cloudFormationClient.describeStacks(DescribeStacksRequest.builder()
@@ -111,6 +134,11 @@ public class ProductsCatalogTest {
         return productDTO;
     }
 
+    private String createProductAndExtractId(ProductDTO productDTO) {
+        Response response = createProduct(productDTO);
+        return response.body().as(Product.class).getId();
+    }
+
     private Response createProduct(ProductDTO productDTO) {
         Response response = given()
                 .baseUri(apiEndpoint)
@@ -122,6 +150,23 @@ public class ProductsCatalogTest {
         assertThat(response.body().asString()).isNotBlank();
 
         return response;
+    }
+
+    private List<Product> retrievedProducts() {
+        return given()
+                .baseUri(apiEndpoint)
+                .when()
+                .get("/products")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .as(new TypeRef<>() {
+                });
+    }
+
+    private void assertProductsData(List<Product> filteredProducts) {
+        filteredProducts.forEach(this::assertProductData);
     }
 
     private void assertProductData(Product createdProduct) {
