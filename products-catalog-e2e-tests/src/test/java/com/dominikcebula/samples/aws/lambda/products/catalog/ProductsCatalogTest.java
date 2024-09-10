@@ -116,6 +116,8 @@ public class ProductsCatalogTest {
         retrieveProductById(createResponse);
 
         removeProductById(createResponse);
+
+        assertProductRemoved(createResponse);
     }
 
     private static String getApiEndpoint() {
@@ -177,19 +179,6 @@ public class ProductsCatalogTest {
                 });
     }
 
-    private void assertProductsData(List<Product> filteredProducts) {
-        filteredProducts.forEach(this::assertProductData);
-    }
-
-    private void assertProductData(Product createdProduct) {
-        assertThat(createdProduct.getId()).isNotBlank();
-        assertThat(createdProduct.getName()).isEqualTo(PRODUCT_NAME);
-        assertThat(createdProduct.getDescription()).isEqualTo(PRODUCT_DESCRIPTION);
-        assertThat(createdProduct.getCategory()).isEqualTo(PRODUCT_CATEGORY);
-        assertThat(createdProduct.getSku()).isEqualTo(PRODUCT_SKU);
-        assertThat(createdProduct.getPrice()).isEqualTo(PRODUCT_PRICE);
-    }
-
     private Product retrieveProductByLocationHeader(Response response) {
         String productLocation = response.getHeader(LOCATION);
 
@@ -226,6 +215,31 @@ public class ProductsCatalogTest {
                 .then()
                 .statusCode(HttpStatus.NO_CONTENT.value());
     }
+
+    private void assertProductsData(List<Product> filteredProducts) {
+        filteredProducts.forEach(this::assertProductData);
+    }
+
+    private void assertProductData(Product createdProduct) {
+        assertThat(createdProduct.getId()).isNotBlank();
+        assertThat(createdProduct.getName()).isEqualTo(PRODUCT_NAME);
+        assertThat(createdProduct.getDescription()).isEqualTo(PRODUCT_DESCRIPTION);
+        assertThat(createdProduct.getCategory()).isEqualTo(PRODUCT_CATEGORY);
+        assertThat(createdProduct.getSku()).isEqualTo(PRODUCT_SKU);
+        assertThat(createdProduct.getPrice()).isEqualTo(PRODUCT_PRICE);
+    }
+
+    private void assertProductRemoved(Response response) {
+        String productId = getProductId(response);
+
+        given()
+                .baseUri(apiEndpoint)
+                .when()
+                .get("/products/" + productId)
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
 
     private String getProductId(Response response) {
         return response.body().as(Product.class).getId();
