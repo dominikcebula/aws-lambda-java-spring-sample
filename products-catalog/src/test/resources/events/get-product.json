@@ -1,0 +1,7 @@
+{
+  "httpMethod": "GET",
+  "path": "/products/0191d843-659a-77c7-ada1-54f7b3f420f1",
+  "pathParameters": {
+    "productId": "0191d843-659a-77c7-ada1-54f7b3f420f1"
+  }
+}

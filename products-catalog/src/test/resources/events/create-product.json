@@ -1,0 +1,4 @@
+{
+  "httpMethod": "POST",
+  "body": "{\n  \"name\": \"Wireless Bluetooth Headphones\",\n  \"description\": \"Over-ear noise-cancelling headphones with 30-hour battery life, built-in mic, and deep bass.\",\n  \"category\": \"Electronics\",\n  \"sku\": \"WH-12345-BT\",\n  \"price\": \"79.99\"\n}\n"
+}
