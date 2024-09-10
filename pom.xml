@@ -18,6 +18,6 @@
     </properties>
 
     <modules>
-        <module>products-catalog</module>
+        <module>products-catalog-lambda-codebase</module>
     </modules>
 </project>
