@@ -3,21 +3,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.dominikcebula.samples.aws.lambda.products.catalog</groupId>
     <artifactId>products-catalog-modules</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>21</java.version>
-
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
-        <maven.compiler.release>${java.version}</maven.compiler.release>
-    </properties>
+    <parent>
+        <groupId>com.dominikcebula.samples.aws.lambda.products.catalog</groupId>
+        <artifactId>products-catalog-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>products-catalog-parent</relativePath>
+    </parent>
 
     <modules>
+        <module>products-catalog-parent</module>
         <module>products-catalog-lambda-codebase</module>
     </modules>
 
