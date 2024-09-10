@@ -25,6 +25,11 @@ Resources:
       Environment:
         Variables:
           SPRING_CLOUD_FUNCTION_DEFINITION: createProductFunction
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: products
+        - DynamoDBWritePolicy:
+            TableName: products
       Events:
         ListProducts:
           Type: Api
@@ -39,6 +44,9 @@ Resources:
       Environment:
         Variables:
           SPRING_CLOUD_FUNCTION_DEFINITION: getProductFunction
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: products
       Events:
         ListProducts:
           Type: Api
@@ -70,6 +78,11 @@ Resources:
       Environment:
         Variables:
           SPRING_CLOUD_FUNCTION_DEFINITION: updateProductFunction
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: products
+        - DynamoDBWritePolicy:
+            TableName: products
       Events:
         ListProducts:
           Type: Api
@@ -84,6 +97,11 @@ Resources:
       Environment:
         Variables:
           SPRING_CLOUD_FUNCTION_DEFINITION: deleteProductFunction
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: products
+        - DynamoDBWritePolicy:
+            TableName: products
       Events:
         ListProducts:
           Type: Api
