@@ -1,5 +1,6 @@
 package com.dominikcebula.samples.aws.lambda.products.catalog;
 
+import com.dominikcebula.samples.aws.lambda.products.catalog.shared.http.product.ProductDTO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import software.amazon.awssdk.services.cloudformation.model.DescribeStacksRespon
 import software.amazon.awssdk.services.cloudformation.model.Output;
 import software.amazon.awssdk.services.cloudformation.model.Stack;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -38,6 +40,20 @@ public class ProductsCatalogTest {
                 .body(not(blankString())).extract();
     }
 
+    @Test
+    void shouldCreateAndRetrieveProduct() {
+        ProductDTO productDTO = createProductDTO();
+
+        given()
+                .baseUri(apiEndpoint)
+                .when()
+                .body(productDTO)
+                .post("/products")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.CREATED.value());
+    }
+
     private static String getApiEndpoint() {
         try (CloudFormationClient cloudFormationClient = CloudFormationClient.builder().httpClient(ApacheHttpClient.create()).build()) {
             DescribeStacksResponse response = cloudFormationClient.describeStacks(DescribeStacksRequest.builder()
@@ -55,4 +71,20 @@ public class ProductsCatalogTest {
                     .orElseThrow(() -> new IllegalStateException("Unable to find API Endpoint for testing based on Cloud Formation Stack"));
         }
     }
+
+    private ProductDTO createProductDTO() {
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setName(PRODUCT_NAME);
+        productDTO.setDescription(PRODUCT_DESCRIPTION);
+        productDTO.setCategory(PRODUCT_CATEGORY);
+        productDTO.setSku(PRODUCT_SKU);
+        productDTO.setPrice(PRODUCT_PRICE);
+        return productDTO;
+    }
+
+    private static final String PRODUCT_NAME = "Stainless Steel Water Bottle";
+    private static final String PRODUCT_DESCRIPTION = "Double-wall insulated, leak-proof water bottle with 24-hour cold and 12-hour hot retention.";
+    private static final String PRODUCT_CATEGORY = "Home & Kitchen";
+    private static final String PRODUCT_SKU = "WB-98765-SS";
+    private static final BigDecimal PRODUCT_PRICE = new BigDecimal("24.99");
 }
