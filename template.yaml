@@ -98,9 +98,7 @@ Resources:
         Variables:
           SPRING_CLOUD_FUNCTION_DEFINITION: deleteProductFunction
       Policies:
-        - DynamoDBReadPolicy:
-            TableName: products
-        - DynamoDBWritePolicy:
+        - DynamoDBCrudPolicy:
             TableName: products
       Events:
         ListProducts:

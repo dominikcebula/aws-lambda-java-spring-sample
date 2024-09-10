@@ -25,6 +25,7 @@ import static org.hamcrest.text.IsBlankString.blankString;
 import static org.springframework.http.HttpHeaders.LOCATION;
 
 public class ProductsCatalogTest {
+    private static final String CF_STACK_NAME = "products-catalog-lambda-app";
     private static final String ENV_STAGE_NAME = "dev";
 
     private static String apiEndpoint;
@@ -106,14 +107,25 @@ public class ProductsCatalogTest {
         assertProductsData(filteredProducts);
     }
 
+    @Test
+    void shouldCreateRetrieveAndRemoveProductById() {
+        ProductDTO productDTO = buildProductDTO();
+
+        Response createResponse = createProduct(productDTO);
+
+        retrieveProductById(createResponse);
+
+        removeProductById(createResponse);
+    }
+
     private static String getApiEndpoint() {
         try (CloudFormationClient cloudFormationClient = CloudFormationClient.builder().httpClient(ApacheHttpClient.create()).build()) {
             DescribeStacksResponse response = cloudFormationClient.describeStacks(DescribeStacksRequest.builder()
-                    .stackName("products-catalog-lambda-app")
+                    .stackName(CF_STACK_NAME)
                     .build());
 
             return response.stacks().stream()
-                    .filter(stack -> stack.stackName().equals("products-catalog-lambda-app"))
+                    .filter(stack -> stack.stackName().equals(CF_STACK_NAME))
                     .map(Stack::outputs)
                     .flatMap(List::stream)
                     .filter(output -> output.outputKey().equals("ApiEndpoint"))
@@ -136,7 +148,7 @@ public class ProductsCatalogTest {
 
     private String createProductAndExtractId(ProductDTO productDTO) {
         Response response = createProduct(productDTO);
-        return response.body().as(Product.class).getId();
+        return getProductId(response);
     }
 
     private Response createProduct(ProductDTO productDTO) {
@@ -179,10 +191,12 @@ public class ProductsCatalogTest {
     }
 
     private Product retrieveProductByLocationHeader(Response response) {
+        String productLocation = response.getHeader(LOCATION);
+
         return given()
                 .baseUri(apiEndpoint)
                 .when()
-                .get(response.getHeader(LOCATION))
+                .get(productLocation)
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .extract()
@@ -190,16 +204,31 @@ public class ProductsCatalogTest {
     }
 
     private Product retrieveProductById(Response response) {
-        String createdProductId = response.body().as(Product.class).getId();
+        String productId = getProductId(response);
 
         return given()
                 .baseUri(apiEndpoint)
                 .when()
-                .get("/products/" + createdProductId)
+                .get("/products/" + productId)
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .extract()
                 .as(Product.class);
+    }
+
+    private void removeProductById(Response response) {
+        String productId = getProductId(response);
+
+        given()
+                .baseUri(apiEndpoint)
+                .when()
+                .delete("/products/" + productId)
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    private String getProductId(Response response) {
+        return response.body().as(Product.class).getId();
     }
 
     private static final String PRODUCT_NAME = "Stainless Steel Water Bottle";
