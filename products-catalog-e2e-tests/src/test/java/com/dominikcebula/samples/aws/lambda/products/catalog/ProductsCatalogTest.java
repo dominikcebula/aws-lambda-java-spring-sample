@@ -17,6 +17,7 @@ import software.amazon.awssdk.services.cloudformation.model.Stack;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -118,6 +119,31 @@ public class ProductsCatalogTest {
         removeProductById(createResponse);
 
         assertProductRemoved(createResponse);
+    }
+
+    @Test
+    void shouldCreateAndRemoveMultipleProducts() {
+        ProductDTO productDTO1 = buildProductDTO();
+        ProductDTO productDTO2 = buildProductDTO();
+        ProductDTO productDTO3 = buildProductDTO();
+
+        Set<Response> createdProductResponses = Set.of(
+                createProduct(productDTO1),
+                createProduct(productDTO2),
+                createProduct(productDTO3)
+        );
+        Set<String> createdProductIds = createdProductResponses.stream()
+                .map(response -> response.body().as(Product.class).getId())
+                .collect(Collectors.toSet());
+
+        createdProductResponses.forEach(this::removeProductById);
+
+        List<Product> retrievedProduct = retrievedProducts();
+        List<Product> filteredProducts = retrievedProduct.stream()
+                .filter(product -> createdProductIds.contains(product.getId()))
+                .toList();
+
+        assertThat(filteredProducts).isEmpty();
     }
 
     private static String getApiEndpoint() {
