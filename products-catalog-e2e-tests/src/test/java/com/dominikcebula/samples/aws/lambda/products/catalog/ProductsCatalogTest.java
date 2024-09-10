@@ -17,6 +17,7 @@ import software.amazon.awssdk.services.cloudformation.model.Stack;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
@@ -109,6 +110,19 @@ public class ProductsCatalogTest {
     }
 
     @Test
+    void shouldCreateProductWithGivenId() {
+        UUID productId = UUID.randomUUID();
+        ProductDTO productDTO = buildProductDTO();
+
+        createProduct(productId, productDTO);
+
+        Product product = retrieveProductById(productId.toString());
+
+        assertThat(product.getId()).isEqualTo(productId.toString());
+        assertProductData(product);
+    }
+
+    @Test
     void shouldCreateRetrieveAndRemoveProductById() {
         ProductDTO productDTO = buildProductDTO();
 
@@ -192,6 +206,19 @@ public class ProductsCatalogTest {
         return response;
     }
 
+    private Response createProduct(UUID id, ProductDTO productDTO) {
+        Response response = given()
+                .baseUri(apiEndpoint)
+                .when()
+                .body(productDTO)
+                .put("/products/" + id);
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+        assertThat(response.body().asString()).isNotBlank();
+
+        return response;
+    }
+
     private List<Product> retrievedProducts() {
         return given()
                 .baseUri(apiEndpoint)
@@ -221,6 +248,10 @@ public class ProductsCatalogTest {
     private Product retrieveProductById(Response response) {
         String productId = getProductId(response);
 
+        return retrieveProductById(productId);
+    }
+
+    private Product retrieveProductById(String productId) {
         return given()
                 .baseUri(apiEndpoint)
                 .when()

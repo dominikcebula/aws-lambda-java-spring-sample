@@ -108,6 +108,21 @@ Resources:
             Path: /products/{productId}
             Method: delete
 
+  ProductsDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: "PAY_PER_REQUEST"
+      OnDemandThroughput:
+        MaxReadRequestUnits: 5
+        MaxWriteRequestUnits: 5
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+      TableName: "products"
+
 Outputs:
   ApiEndpoint:
     Description: "API Gateway endpoint URL for Products API"
