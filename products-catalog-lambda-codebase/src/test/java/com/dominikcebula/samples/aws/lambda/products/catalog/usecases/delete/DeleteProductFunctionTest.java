@@ -49,7 +49,7 @@ class DeleteProductFunctionTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         errorDTOAssertions.assertErrorMessageInResponseBody(response,
-                "Unable to find valid UUID for Product ID in request URL /products/:productId");
+                "Unable to find valid UUID for Product ID in request URL /api/v1/products/:productId");
     }
 
     private void assertProductDeleted(APIGatewayProxyRequestEvent requestEvent) {

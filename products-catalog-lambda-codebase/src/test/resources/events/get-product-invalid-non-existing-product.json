@@ -1,6 +1,6 @@
 {
   "httpMethod": "GET",
-  "path": "/products/0191db04-28fa-704c-98c0-92b92ed7b2e7",
+  "path": "/api/v1/products/0191db04-28fa-704c-98c0-92b92ed7b2e7",
   "pathParameters": {
     "productId": "0191db04-28fa-704c-98c0-92b92ed7b2e7"
   }

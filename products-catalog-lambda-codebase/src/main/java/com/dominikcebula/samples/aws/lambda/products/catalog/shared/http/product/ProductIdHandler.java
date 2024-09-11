@@ -27,14 +27,14 @@ public class ProductIdHandler {
     }
 
     public String getProductLocationHeader(Product product) {
-        return "/products/" + product.getId();
+        return "/api/v1/products/" + product.getId();
     }
 
     public APIGatewayProxyResponseEvent getNonExistingProductIdResponse() {
         return new APIGatewayProxyResponseEvent()
                 .withStatusCode(HttpStatusCode.BAD_REQUEST)
                 .withBody(jsonConverter.asJson(
-                        errorWithMessage("Unable to find valid UUID for Product ID in request URL /products/:productId")));
+                        errorWithMessage("Unable to find valid UUID for Product ID in request URL /api/v1/products/:productId")));
     }
 
     private static boolean isUUID(String id) {

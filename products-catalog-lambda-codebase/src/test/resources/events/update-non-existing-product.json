@@ -1,6 +1,6 @@
 {
   "httpMethod": "POST",
-  "path": "/products/0191db0d-eb4d-790e-826b-c1e6d0750da0",
+  "path": "/api/v1/products/0191db0d-eb4d-790e-826b-c1e6d0750da0",
   "pathParameters": {
     "productId": "0191db0d-eb4d-790e-826b-c1e6d0750da0"
   },

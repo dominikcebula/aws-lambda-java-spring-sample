@@ -42,7 +42,7 @@ public class ProductsCatalogTest {
         given()
                 .baseUri(apiEndpoint)
                 .when()
-                .get("/products")
+                .get("/api/v1/products")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
@@ -57,7 +57,7 @@ public class ProductsCatalogTest {
                 .baseUri(apiEndpoint)
                 .when()
                 .body(productDTO)
-                .post("/products")
+                .post("/api/v1/products")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.CREATED.value())
@@ -218,7 +218,7 @@ public class ProductsCatalogTest {
                 .baseUri(apiEndpoint)
                 .when()
                 .body(productDTO)
-                .post("/products");
+                .post("/api/v1/products");
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
         assertThat(response.body().asString()).isNotBlank();
@@ -231,7 +231,7 @@ public class ProductsCatalogTest {
                 .baseUri(apiEndpoint)
                 .when()
                 .body(productDTO)
-                .put("/products/" + id);
+                .put("/api/v1/products/" + id);
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
         assertThat(response.body().asString()).isNotBlank();
@@ -244,7 +244,7 @@ public class ProductsCatalogTest {
                 .baseUri(apiEndpoint)
                 .when()
                 .body(productDTO)
-                .put("/products/" + id);
+                .put("/api/v1/products/" + id);
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.body().asString()).isNotBlank();
@@ -256,7 +256,7 @@ public class ProductsCatalogTest {
         return given()
                 .baseUri(apiEndpoint)
                 .when()
-                .get("/products")
+                .get("/api/v1/products")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
@@ -288,7 +288,7 @@ public class ProductsCatalogTest {
         return given()
                 .baseUri(apiEndpoint)
                 .when()
-                .get("/products/" + productId)
+                .get("/api/v1/products/" + productId)
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .extract()
@@ -301,7 +301,7 @@ public class ProductsCatalogTest {
         given()
                 .baseUri(apiEndpoint)
                 .when()
-                .delete("/products/" + productId)
+                .delete("/api/v1/products/" + productId)
                 .then()
                 .statusCode(HttpStatus.NO_CONTENT.value());
     }
@@ -325,7 +325,7 @@ public class ProductsCatalogTest {
         given()
                 .baseUri(apiEndpoint)
                 .when()
-                .get("/products/" + productId)
+                .get("/api/v1/products/" + productId)
                 .then()
                 .statusCode(HttpStatus.NOT_FOUND.value());
     }

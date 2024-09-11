@@ -41,7 +41,7 @@ class CreateProductsFunctionTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED.value());
         assertThat(response.getHeaders()).containsEntry(CONTENT_TYPE, APPLICATION_JSON_VALUE);
-        assertThat(response.getHeaders()).containsEntry(LOCATION, "/products/" + createdProduct.getId());
+        assertThat(response.getHeaders()).containsEntry(LOCATION, "/api/v1/products/" + createdProduct.getId());
         assertCreatedProduct(createdProduct);
         assertStoredProduct(createdProduct);
     }
