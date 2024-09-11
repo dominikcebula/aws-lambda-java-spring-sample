@@ -27,7 +27,7 @@ import static org.hamcrest.text.IsBlankString.blankString;
 import static org.springframework.http.HttpHeaders.LOCATION;
 
 public class ProductsCatalogTest {
-    private static final String CF_STACK_NAME = "products-catalog-lambda-app";
+    private static final String CF_STACK_NAME = "aws-lambda-java-spring-sample-products-catalog";
     private static final String ENV_STAGE_NAME = "dev";
 
     private static String apiEndpoint;

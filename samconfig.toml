@@ -1,8 +1,8 @@
 version = 0.1
 [default.deploy.parameters]
-stack_name = "products-catalog-lambda-app"
+stack_name = "aws-lambda-java-spring-sample-products-catalog"
 resolve_s3 = true
-s3_prefix = "products-catalog-lambda-app"
+s3_prefix = "aws-lambda-java-spring-sample-products-catalog"
 region = "eu-central-1"
 capabilities = "CAPABILITY_IAM"
 image_repositories = []
