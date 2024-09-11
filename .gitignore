@@ -3,3 +3,4 @@ target
 dynamodb-local-metadata.json
 build.toml
 .aws-sam
+*.bkp

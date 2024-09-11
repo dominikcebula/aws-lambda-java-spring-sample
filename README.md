@@ -7,7 +7,7 @@ Gateway.
 
 # High Level Design Diagram
 
-TBD
+![diagram.drawio.png](diagram.drawio.png)
 
 # Supported Use Cases
 
