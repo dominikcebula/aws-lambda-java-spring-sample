@@ -38,32 +38,10 @@ public class ProductsCatalogTest {
     }
 
     @Test
-    void shouldRetrieveAnyListOfProducts() {
-        given()
-                .baseUri(apiEndpoint)
-                .when()
-                .get("/api/v1/products")
-                .then()
-                .assertThat()
-                .statusCode(HttpStatus.OK.value())
-                .body(not(blankString()));
-    }
-
-    @Test
     void shouldCreateProduct() {
         ProductDTO productDTO = buildProductDTO();
 
-        Product createdProduct = given()
-                .baseUri(apiEndpoint)
-                .when()
-                .body(productDTO)
-                .post("/api/v1/products")
-                .then()
-                .assertThat()
-                .statusCode(HttpStatus.CREATED.value())
-                .header(LOCATION, not(blankString()))
-                .extract()
-                .as(Product.class);
+        Product createdProduct = createProduct(productDTO).as(Product.class);
 
         assertProductData(createdProduct);
     }
@@ -120,6 +98,13 @@ public class ProductsCatalogTest {
 
         assertThat(product.getId()).isEqualTo(productId.toString());
         assertProductData(product);
+    }
+
+    @Test
+    void shouldRetrieveListOfProducts() {
+        List<Product> products = retrievedProducts();
+
+        assertThat(products).isNotNull();
     }
 
     @Test
@@ -221,6 +206,7 @@ public class ProductsCatalogTest {
                 .post("/api/v1/products");
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+        assertThat(response.header(LOCATION)).isNotBlank();
         assertThat(response.body().asString()).isNotBlank();
 
         return response;
@@ -260,6 +246,7 @@ public class ProductsCatalogTest {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
+                .body(not(blankString()))
                 .extract()
                 .as(new TypeRef<>() {
                 });
