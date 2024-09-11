@@ -67,7 +67,8 @@ Value               https://v7swljnkwc.execute-api.eu-central-1.amazonaws.com/
 ---------------------------------------------------------------------------------
 ```
 
-API will be available under API URL with StageName, in the above example it will, using get all products example:
+API will be available under API URL with StageName, in the above example it will be as below
+(get all products use case example):
 
 `GET https://v7swljnkwc.execute-api.eu-central-1.amazonaws.com/dev/api/v1/products`
 
