@@ -19,6 +19,15 @@ All CRUD operations regarding Products Catalog Management are supported:
 * Product Retrieval based on ID
 * Product Deletion
 
+# Supported Product Attributes
+
+* ID
+* Name
+* Description
+* Category
+* SKU
+* Price
+
 # API
 
 TBD
