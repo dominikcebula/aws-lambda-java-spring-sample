@@ -58,6 +58,28 @@ API will be available under API URL with StageName, in the above example it will
 
 `GET https://v7swljnkwc.execute-api.eu-central-1.amazonaws.com/dev/api/v1/products`
 
+# Sample operations using API
+
+## Add Products
+
+TBD
+
+## List All Products
+
+TBD
+
+## Retrieve Product by ID
+
+TBD
+
+## Update Product by ID
+
+TBD
+
+## Remove Product by ID
+
+TBD
+
 # Author
 
 Dominik Cebula
