@@ -113,23 +113,47 @@ curl -XPOST -d '{
   }' https://v7swljnkwc.execute-api.eu-central-1.amazonaws.com/dev/api/v1/products
 ```
 
+## Add Product with predefined UUID
+
+```shell
+curl -XPUT -d '{
+  "name": "Organic Cotton Bed Sheets",
+  "description": "Ultra-soft, breathable, 100% organic cotton bed sheet set with deep pockets. Includes one fitted sheet, one flat sheet, and two pillowcases.",
+  "category": "Bedding",
+  "sku": "BS-99887-OC",
+  "price": "59.99"
+}' https://v7swljnkwc.execute-api.eu-central-1.amazonaws.com/dev/api/v1/products/d9ac78a3-cd3d-49a0-a8f1-8c8dbbe526c3
+```
+
 ## List All Products
 
 ```shell
-curl https://v7swljnkwc.execute-api.eu-central-1.amazonaws.com/dev/api/v1/products
+curl -XGET https://v7swljnkwc.execute-api.eu-central-1.amazonaws.com/dev/api/v1/products
 ```
 
 ## Retrieve Product by ID
 
-TBD
+```shell
+curl -XGET https://v7swljnkwc.execute-api.eu-central-1.amazonaws.com/dev/api/v1/products/d9ac78a3-cd3d-49a0-a8f1-8c8dbbe526c3
+```
 
 ## Update Product by ID
 
-TBD
+```shell
+curl -XPUT -d '{
+  "name": "Portable Wireless Speaker",
+  "description": "Compact Bluetooth speaker with deep bass, 12-hour battery life, and water-resistant design. Ideal for outdoor use.",
+  "category": "Audio",
+  "sku": "SP-77889-BT",
+  "price": "39.99"
+}' https://v7swljnkwc.execute-api.eu-central-1.amazonaws.com/dev/api/v1/products/d9ac78a3-cd3d-49a0-a8f1-8c8dbbe526c3
+```
 
 ## Remove Product by ID
 
-TBD
+```shell
+curl -XDELETE https://v7swljnkwc.execute-api.eu-central-1.amazonaws.com/dev/api/v1/products/d9ac78a3-cd3d-49a0-a8f1-8c8dbbe526c3
+```
 
 # Author
 
