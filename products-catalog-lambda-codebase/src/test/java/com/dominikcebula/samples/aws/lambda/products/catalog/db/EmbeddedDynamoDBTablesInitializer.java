@@ -6,7 +6,7 @@ import com.dominikcebula.amazonaws.dynamodb.embedded.junit.extension.api.Embedde
 
 public class EmbeddedDynamoDBTablesInitializer implements EmbeddedDynamoDBInitializer {
     @Override
-    public void initialize(AmazonDynamoDB embeddedAmazonDynamoDB) {
+    public void initialize(AmazonDynamoDB amazonDynamoDB) {
         CreateTableRequest createTableRequest = new CreateTableRequest()
                 .withTableName("products")
                 .withKeySchema(
@@ -17,6 +17,6 @@ public class EmbeddedDynamoDBTablesInitializer implements EmbeddedDynamoDBInitia
                 )
                 .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
 
-        embeddedAmazonDynamoDB.createTable(createTableRequest);
+        amazonDynamoDB.createTable(createTableRequest);
     }
 }

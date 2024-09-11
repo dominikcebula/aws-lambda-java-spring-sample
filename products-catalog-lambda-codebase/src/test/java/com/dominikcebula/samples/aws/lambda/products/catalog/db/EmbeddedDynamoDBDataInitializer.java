@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class EmbeddedDynamoDBDataInitializer implements EmbeddedDynamoDBInitializer {
     @Override
-    public void initialize(AmazonDynamoDB embeddedAmazonDynamoDB) {
-        embeddedAmazonDynamoDB.putItem(
+    public void initialize(AmazonDynamoDB amazonDynamoDB) {
+        amazonDynamoDB.putItem(
                 "products",
                 Map.of(
                         "id", new AttributeValue().withS("0191d843-659a-76b9-87a3-0cad45006a2c"),
@@ -21,7 +21,7 @@ public class EmbeddedDynamoDBDataInitializer implements EmbeddedDynamoDBInitiali
                 )
         );
 
-        embeddedAmazonDynamoDB.putItem(
+        amazonDynamoDB.putItem(
                 "products",
                 Map.of(
                         "id", new AttributeValue().withS("0191d843-659a-77c7-ada1-54f7b3f420f1"),
@@ -33,7 +33,7 @@ public class EmbeddedDynamoDBDataInitializer implements EmbeddedDynamoDBInitiali
                 )
         );
 
-        embeddedAmazonDynamoDB.putItem(
+        amazonDynamoDB.putItem(
                 "products",
                 Map.of(
                         "id", new AttributeValue().withS("0191d843-659a-7ea6-a29c-efc965fe4cf6"),

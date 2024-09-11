@@ -4,7 +4,6 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.amazonaws.services.lambda.runtime.tests.annotations.Event;
 import com.dominikcebula.amazonaws.dynamodb.embedded.junit.extension.api.WithEmbeddedDynamoDB;
-import com.dominikcebula.samples.aws.lambda.products.catalog.db.EmbeddedDynamoDBConfiguration;
 import com.dominikcebula.samples.aws.lambda.products.catalog.db.EmbeddedDynamoDBDataInitializer;
 import com.dominikcebula.samples.aws.lambda.products.catalog.db.EmbeddedDynamoDBTablesInitializer;
 import com.dominikcebula.samples.aws.lambda.products.catalog.db.entity.Product;
@@ -13,7 +12,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 
 import java.math.BigDecimal;
@@ -25,7 +23,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @SpringBootTest
 @WithEmbeddedDynamoDB(embeddedDynamoDBInitializers = {EmbeddedDynamoDBTablesInitializer.class, EmbeddedDynamoDBDataInitializer.class})
-@Import(EmbeddedDynamoDBConfiguration.class)
 class ListProductsFunctionTest {
     @Autowired
     private ListProductsFunction underTest;
