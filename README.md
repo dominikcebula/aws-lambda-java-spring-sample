@@ -30,7 +30,11 @@ All CRUD operations regarding Products Catalog Management are supported:
 
 # API
 
-TBD
+* `GET /api/v1/products` - List All Products
+* `GET /api/v1/products/d9ac78a3-cd3d-49a0-a8f1-8c8dbbe526c3` - Retrieve Product by ID
+* `POST /api/v1/products` - Add Product
+* `PUT /api/v1/products/d9ac78a3-cd3d-49a0-a8f1-8c8dbbe526c3` - Update Product or Add Product with predefined UUID
+* `DELETE /api/v1/products/d9ac78a3-cd3d-49a0-a8f1-8c8dbbe526c3` - Remove Product by ID
 
 # Deployment
 
