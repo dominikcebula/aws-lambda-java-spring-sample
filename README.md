@@ -23,6 +23,41 @@ All CRUD operations regarding Products Catalog Management are supported:
 
 TBD
 
+# Deployment
+
+Code is deployed using AWS SAM.
+
+First, build the project:
+
+```shell
+mvn clean install
+```
+
+Then use AWS SAM to deploy it:
+
+```shell
+sam deploy
+```
+
+Once deployment is done, last line will show API URL:
+
+```text
+---------------------------------------------------------------------------------
+
+CloudFormation outputs from deployed stack
+---------------------------------------------------------------------------------
+Outputs
+---------------------------------------------------------------------------------
+Key                 ApiEndpoint
+Description         API Gateway endpoint URL for Products API
+Value               https://v7swljnkwc.execute-api.eu-central-1.amazonaws.com/
+---------------------------------------------------------------------------------
+```
+
+API will be available under API URL with StageName, in the above example it will, using get all products example:
+
+`GET https://v7swljnkwc.execute-api.eu-central-1.amazonaws.com/dev/api/v1/products`
+
 # Author
 
 Dominik Cebula
