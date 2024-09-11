@@ -6,7 +6,7 @@ Description: >
 Globals:
   Function:
     Tracing: Active
-    CodeUri: products-catalog-lambda-codebase/target/api/v1/products-catalog-lambda-codebase-1.0.0-SNAPSHOT-aws.jar
+    CodeUri: products-catalog-lambda-codebase/target/products-catalog-lambda-codebase-1.0.0-SNAPSHOT-aws.jar
     Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
     Runtime: java21
     Timeout: 30
